@@ -5,13 +5,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t devops-webapp:1.0 .'
+                sh 'docker build -t devops-webapp:1.0 .'
             }
         }
     }
