@@ -5,7 +5,7 @@ pipeline {
         AWS_REGION = 'ap-southeast-2'
         ECR_REGISTRY = '952618422790.dkr.ecr.ap-southeast-2.amazonaws.com'
         ECR_REPOSITORY = 'devops-webapp'
-        IMAGE_TAG = '1.0'
+        IMAGE_TAG = "${BUILD_NUMBER}"
         ANSIBLE_HOST = '172.31.42.77'
     }
 
@@ -44,6 +44,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
+                    sed -i "s/:1.0/:$IMAGE_TAG/" k8s/deployment.yaml
                     scp -i /var/lib/jenkins/.ssh/id_ed25519 \
                     -o IdentitiesOnly=yes \
                     k8s/deployment.yaml \
