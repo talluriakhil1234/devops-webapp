@@ -6,6 +6,7 @@ pipeline {
         ECR_REGISTRY = '952618422790.dkr.ecr.ap-southeast-2.amazonaws.com'
         ECR_REPOSITORY = 'devops-webapp'
         IMAGE_TAG = '1.0'
+        ANSIBLE_HOST = '172.31.42.77'
     }
 
     stages {
@@ -36,6 +37,23 @@ pipeline {
 
                     docker push \
                     $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                '''
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    scp -i /var/lib/jenkins/.ssh/id_ed25519 \
+                    -o IdentitiesOnly=yes \
+                    k8s/deployment.yaml \
+                    k8s/service.yaml \
+                    ec2-user@$ANSIBLE_HOST:/home/ec2-user/deploy/
+
+                    ssh -i /var/lib/jenkins/.ssh/id_ed25519 \
+                    -o IdentitiesOnly=yes \
+                    ec2-user@$ANSIBLE_HOST \
+                    "ansible-playbook /home/ec2-user/deploy/deploy-k8s.yml"
                 '''
             }
         }
