@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-webapp
+  template:
+    metadata:
+      labels:
+        app: devops-webapp
+    spec:
+      containers:
+        - name: devops-webapp
+          image: 952618422790.dkr.ecr.ap-southeast-2.amazonaws.com/devops-webapp:1.0
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: ecr-secret
