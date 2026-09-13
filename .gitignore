@@ -3,3 +3,9 @@ target/
 .idea/
 .vscode/
 *.iml
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/aws-identity.txt
+terraform/ec2.txt
+terraform/instances.json
